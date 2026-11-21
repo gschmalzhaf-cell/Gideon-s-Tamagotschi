@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.gideon.tamagotchi.ui.create.CreatePetScreen
 import com.gideon.tamagotchi.ui.home.HomeScreen
 import com.gideon.tamagotchi.ui.navigation.Routes
 import com.gideon.tamagotchi.ui.theme.GideonTheme
@@ -17,7 +18,22 @@ fun GideonApp() {
             startDestination = Routes.Home
         ) {
             composable(Routes.Home) {
-                HomeScreen()
+                HomeScreen(
+                    onNoPet = {
+                        navController.navigate(Routes.Create) {
+                            popUpTo(Routes.Home) { inclusive = true }
+                        }
+                    }
+                )
+            }
+            composable(Routes.Create) {
+                CreatePetScreen(
+                    onPetCreated = {
+                        navController.navigate(Routes.Home) {
+                            popUpTo(Routes.Create) { inclusive = true }
+                        }
+                    }
+                )
             }
         }
     }

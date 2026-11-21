@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    name: Build & Unit-Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Read compileSdk from app/build.gradle.kts
+        id: sdk
+        run: |
+          COMPILE_SDK=$(grep -oP 'compileSdk\s*=\s*\K[0-9]+' app/build.gradle.kts | head -1)
+          echo "compileSdk=$COMPILE_SDK" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Android SDK (cmdline-tools)
+        uses: android-actions/setup-android@v4
+
+      - name: Accept licenses and install SDK components
+        run: |
+          SDKMANAGER_BIN=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -1)
+          echo "$(dirname "$SDKMANAGER_BIN")" >> "$GITHUB_PATH"
+          yes | sdkmanager --licenses
+          sdkmanager "platforms;android-${{ steps.sdk.outputs.compileSdk }}" 2>/dev/null || sdkmanager "platforms;android-${{ steps.sdk.outputs.compileSdk }}.0"
+          if [ ! -d "$ANDROID_HOME/platforms/android-${{ steps.sdk.outputs.compileSdk }}" ]; then
+            ln -s "$ANDROID_HOME/platforms/android-${{ steps.sdk.outputs.compileSdk }}.0" "$ANDROID_HOME/platforms/android-${{ steps.sdk.outputs.compileSdk }}"
+          fi
+          sdkmanager "build-tools;36.0.0" "build-tools;35.0.0"
+
+      - name: Install Gradle (version from gradle-wrapper.properties)
+        run: |
+          GRADLE_VERSION=$(grep -oP 'gradle-\K[0-9]+\.[0-9]+\.[0-9]+(?=-bin\.zip)' gradle/wrapper/gradle-wrapper.properties)
+          echo "Installing Gradle $GRADLE_VERSION"
+          curl -sL "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -o /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /opt
+          echo "/opt/gradle-${GRADLE_VERSION}/bin" >> "$GITHUB_PATH"
+
+      - name: Build debug APK
+        run: gradle :app:assembleDebug
+
+      - name: Run unit tests
+        run: gradle :app:testDebugUnitTest
