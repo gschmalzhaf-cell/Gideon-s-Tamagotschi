@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Gideon</string>
+    <string name="create_title">Neues Pet</string>
+    <string name="create_name_label">Name</string>
+    <string name="create_type_label">Typ</string>
+    <string name="create_color_label">Farbe</string>
+    <string name="create_submit">Pet erstellen</string>
+    <string name="type_blob">Blob</string>
+    <string name="type_cookie">Keks</string>
+    <string name="type_star">Stern</string>
+    <string name="stat_hunger">Hunger</string>
+    <string name="stat_happiness">Glück</string>
+    <string name="stat_energy">Energie</string>
+    <string name="stat_hygiene">Sauberkeit</string>
+    <string name="stat_health">Gesundheit</string>
 </resources>
