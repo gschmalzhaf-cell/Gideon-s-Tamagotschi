@@ -15,5 +15,7 @@ data class PetEntity(
     val happiness: Int,
     val energy: Int,
     val hygiene: Int,
-    @ColumnInfo(name = "is_alive") val isAlive: Boolean
+    @ColumnInfo(name = "is_alive") val isAlive: Boolean,
+    @ColumnInfo(name = "is_sleeping") val isSleeping: Boolean = false,
+    @ColumnInfo(name = "last_tick_at") val lastTickAt: Long = 0
 )

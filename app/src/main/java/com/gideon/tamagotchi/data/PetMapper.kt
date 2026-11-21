@@ -14,5 +14,22 @@ fun PetEntity.toDomain(): Pet = Pet(
     happiness = happiness,
     energy = energy,
     hygiene = hygiene,
-    isAlive = isAlive
+    isAlive = isAlive,
+    isSleeping = isSleeping,
+    lastTickAt = lastTickAt
+)
+
+fun Pet.toEntity(): PetEntity = PetEntity(
+    id = id,
+    name = name,
+    type = type.name,
+    colorHex = colorHex,
+    createdAt = createdAt,
+    hunger = hunger,
+    happiness = happiness,
+    energy = energy,
+    hygiene = hygiene,
+    isAlive = isAlive,
+    isSleeping = isSleeping,
+    lastTickAt = lastTickAt
 )

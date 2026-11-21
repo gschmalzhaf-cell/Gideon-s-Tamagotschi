@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gideon.tamagotchi.data.PetRepository
 import com.gideon.tamagotchi.domain.model.Pet
+import com.gideon.tamagotchi.domain.model.PetAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class HomeUiState(
@@ -18,7 +20,7 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    petRepository: PetRepository
+    private val petRepository: PetRepository
 ) : ViewModel() {
 
     val uiState: StateFlow<HomeUiState> = petRepository.observePet()
@@ -28,4 +30,10 @@ class HomeViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = HomeUiState()
         )
+
+    fun onAction(action: PetAction) {
+        viewModelScope.launch {
+            petRepository.applyAction(action)
+        }
+    }
 }

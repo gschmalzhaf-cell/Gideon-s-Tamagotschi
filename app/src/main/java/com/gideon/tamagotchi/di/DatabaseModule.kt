@@ -19,7 +19,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun providePetDatabase(@ApplicationContext context: Context): PetDatabase =
-        Room.databaseBuilder(context, PetDatabase::class.java, "gideon.db").build()
+        Room.databaseBuilder(context, PetDatabase::class.java, "gideon.db")
+            .fallbackToDestructiveMigration()
+            .build()
 
     @Provides
     fun providePetDao(database: PetDatabase): PetDao = database.petDao()

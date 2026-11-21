@@ -14,4 +14,12 @@
     <string name="stat_energy">Energie</string>
     <string name="stat_hygiene">Sauberkeit</string>
     <string name="stat_health">Gesundheit</string>
+    <string name="action_feed">Füttern</string>
+    <string name="action_play">Spielen</string>
+    <string name="action_wash">Waschen</string>
+    <string name="action_sleep">Schlafen</string>
+    <string name="action_wake">Aufwecken</string>
+    <string name="action_medicine">Medizin</string>
+    <string name="pet_dead">%1$s ist gestorben</string>
+    <string name="pet_sleeping">%1$s schläft gerade</string>
 </resources>
