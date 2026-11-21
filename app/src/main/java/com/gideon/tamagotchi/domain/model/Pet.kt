@@ -10,7 +10,9 @@ data class Pet(
     val happiness: Int,
     val energy: Int,
     val hygiene: Int,
-    val isAlive: Boolean
+    val isAlive: Boolean,
+    val isSleeping: Boolean = false,
+    val lastTickAt: Long = 0
 ) {
     val health: Int
         get() = (hunger + happiness + energy + hygiene) / 4

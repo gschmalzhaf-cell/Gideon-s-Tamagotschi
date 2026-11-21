@@ -32,8 +32,8 @@ Alternativ lässt sich das Projekt direkt in Android Studio öffnen.
 ## Phasen
 
 1. Projektgerüst (Gradle, Hilt, Navigation, Theme)
-2. Pet erstellen + Home-Screen mit Statusbalken + Room-Persistenz – aktueller Stand
-3. Aktionen + Game-Tick
+2. Pet erstellen + Home-Screen mit Statusbalken + Room-Persistenz
+3. Aktionen + Foreground-Game-Tick – aktueller Stand
 4. Background-Ticks, Offline-Sync, Lebenszyklus/Tod
 5. Benachrichtigungen, Animationen, Sounds
 6. Tests + Release-Vorbereitung
