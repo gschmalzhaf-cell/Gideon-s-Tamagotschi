@@ -1,0 +1,101 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Sign & Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout (full history + all tags, fuer Changelog)
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Read compileSdk from app/build.gradle.kts
+        id: sdk
+        run: |
+          COMPILE_SDK=$(grep -oP 'compileSdk\s*=\s*\K[0-9]+' app/build.gradle.kts | head -1)
+          echo "compileSdk=$COMPILE_SDK" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Android SDK (cmdline-tools)
+        uses: android-actions/setup-android@v4
+
+      - name: Accept licenses and install SDK components
+        run: |
+          SDKMANAGER_BIN=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -1)
+          echo "$(dirname "$SDKMANAGER_BIN")" >> "$GITHUB_PATH"
+          yes | sdkmanager --licenses
+          sdkmanager "platforms;android-${{ steps.sdk.outputs.compileSdk }}" 2>/dev/null || sdkmanager "platforms;android-${{ steps.sdk.outputs.compileSdk }}.0"
+          if [ ! -d "$ANDROID_HOME/platforms/android-${{ steps.sdk.outputs.compileSdk }}" ]; then
+            ln -s "$ANDROID_HOME/platforms/android-${{ steps.sdk.outputs.compileSdk }}.0" "$ANDROID_HOME/platforms/android-${{ steps.sdk.outputs.compileSdk }}"
+          fi
+          sdkmanager "build-tools;36.0.0" "build-tools;35.0.0"
+
+      - name: Install Gradle (version from gradle-wrapper.properties)
+        run: |
+          GRADLE_VERSION=$(grep -oP 'gradle-\K[0-9]+\.[0-9]+\.[0-9]+(?=-bin\.zip)' gradle/wrapper/gradle-wrapper.properties)
+          echo "Installing Gradle $GRADLE_VERSION"
+          curl -sL "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -o /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /opt
+          echo "/opt/gradle-${GRADLE_VERSION}/bin" >> "$GITHUB_PATH"
+
+      - name: Decode signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 -d > keystore.jks
+          echo "KEYSTORE_PATH=$PWD/keystore.jks" >> "$GITHUB_ENV"
+
+      - name: Build signed release (APK + AAB)
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: gradle :app:assembleRelease :app:bundleRelease
+
+      - name: Generate release notes (Template + Changelog seit letztem Tag)
+        run: |
+          python3 - "${GITHUB_REF_NAME:-manual}" <<'PY'
+          import subprocess, sys
+          version = sys.argv[1]
+          tags = subprocess.run(["git", "tag", "--sort=-v:refname"], capture_output=True, text=True).stdout.split()
+          prev = next((t for t in tags if t != version), None)
+          changelog = "- Erster Release – komplettes Feature-Set" if not prev else (
+              subprocess.run(["git", "log", "--no-merges", "--pretty=format:- %s", f"{prev}..{version}"],
+                             capture_output=True, text=True).stdout.strip() or "- keine Commits"
+          )
+          tpl = open(".github/release-notes-template.md").read()
+          notes = tpl.replace("{{VERSION}}", version).replace("{{CHANGELOG}}", changelog)
+          with open("/tmp/release-notes.md", "w") as f:
+              f.write(notes)
+          print(notes)
+          PY
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${GITHUB_REF_NAME:-manual}"
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            gh release edit "$VERSION" --notes-file /tmp/release-notes.md
+          else
+            gh release create "$VERSION" \
+              app/build/outputs/apk/release/app-release.apk \
+              app/build/outputs/bundle/release/app-release.aab \
+              --title "Gideon's Tamagot(s)chi $VERSION" \
+              --notes-file /tmp/release-notes.md
+          fi

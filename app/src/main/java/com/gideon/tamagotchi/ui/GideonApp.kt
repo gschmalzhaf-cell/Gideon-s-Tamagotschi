@@ -1,5 +1,10 @@
 package com.gideon.tamagotchi.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,7 +22,11 @@ fun GideonApp() {
         val navController = rememberNavController()
         NavHost(
             navController = navController,
-            startDestination = Routes.Home
+            startDestination = Routes.Home,
+            enterTransition = { fadeIn(tween(260)) + scaleIn(initialScale = 0.96f, animationSpec = tween(260)) },
+            exitTransition = { fadeOut(tween(200)) + scaleOut(targetScale = 0.98f, animationSpec = tween(200)) },
+            popEnterTransition = { fadeIn(tween(240)) + scaleIn(initialScale = 0.98f, animationSpec = tween(240)) },
+            popExitTransition = { fadeOut(tween(200)) + scaleOut(targetScale = 0.96f, animationSpec = tween(200)) }
         ) {
             composable(Routes.Home) {
                 HomeScreen(
