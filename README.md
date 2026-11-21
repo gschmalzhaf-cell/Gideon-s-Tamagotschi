@@ -1,4 +1,4 @@
-# Gideon – Tamagotchi
+# Gideon – Tamagot(s)chi
 
 Gideon ist eine Android-App im Tamagotchi-Stil: ein digitales Haustier, das du
 füttern, mit dem du spielen, das du schlafen legen und pflegen musst. Wird es
