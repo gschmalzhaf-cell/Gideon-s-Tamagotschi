@@ -8,6 +8,7 @@ import com.gideon.tamagotchi.ui.create.CreatePetScreen
 import com.gideon.tamagotchi.ui.gameover.GameOverScreen
 import com.gideon.tamagotchi.ui.home.HomeScreen
 import com.gideon.tamagotchi.ui.navigation.Routes
+import com.gideon.tamagotchi.ui.settings.SettingsScreen
 import com.gideon.tamagotchi.ui.theme.GideonTheme
 
 @Composable
@@ -29,6 +30,9 @@ fun GideonApp() {
                         navController.navigate(Routes.GameOver) {
                             popUpTo(Routes.Home) { inclusive = true }
                         }
+                    },
+                    onOpenSettings = {
+                        navController.navigate(Routes.Settings)
                     }
                 )
             }
@@ -48,6 +52,11 @@ fun GideonApp() {
                             popUpTo(Routes.GameOver) { inclusive = true }
                         }
                     }
+                )
+            }
+            composable(Routes.Settings) {
+                SettingsScreen(
+                    onNavigateUp = { navController.popBackStack() }
                 )
             }
         }

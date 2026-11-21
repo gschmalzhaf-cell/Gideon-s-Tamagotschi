@@ -32,4 +32,16 @@
     <string name="game_over_new_pet">Neues Pet anlegen</string>
     <string name="offline_title">Während du weg warst …</string>
     <string name="offline_message">%1$d Minuten sind vergangen.</string>
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_open">Einstellungen öffnen</string>
+    <string name="settings_back">Zurück</string>
+    <string name="settings_notifications">Benachrichtigungen</string>
+    <string name="settings_sounds">Sounds</string>
+    <string name="notif_channel_name">Pet-Benachrichtigungen</string>
+    <string name="notif_hunger_title">%1$s hat Hunger!</string>
+    <string name="notif_hunger_text">Füttere %1$s, bevor es zu spät ist.</string>
+    <string name="notif_health_title">%1$s geht es schlecht</string>
+    <string name="notif_health_text">Gib %1$s Medizin!</string>
+    <string name="notif_miss_title">%1$s vermisst dich</string>
+    <string name="notif_miss_text">Schau nach %1$s!</string>
 </resources>

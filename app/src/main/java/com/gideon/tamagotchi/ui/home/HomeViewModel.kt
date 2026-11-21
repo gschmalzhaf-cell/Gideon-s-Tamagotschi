@@ -6,6 +6,7 @@ import com.gideon.tamagotchi.data.OfflineReport
 import com.gideon.tamagotchi.data.PetRepository
 import com.gideon.tamagotchi.domain.model.Pet
 import com.gideon.tamagotchi.domain.model.PetAction
+import com.gideon.tamagotchi.util.SoundPlayer
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,7 +25,8 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val petRepository: PetRepository
+    private val petRepository: PetRepository,
+    private val soundPlayer: SoundPlayer
 ) : ViewModel() {
 
     val uiState: StateFlow<HomeUiState> = petRepository.observePet()
@@ -50,6 +52,7 @@ class HomeViewModel @Inject constructor(
     fun onAction(action: PetAction) {
         viewModelScope.launch {
             petRepository.applyAction(action)
+            soundPlayer.playActionSound()
         }
     }
 
