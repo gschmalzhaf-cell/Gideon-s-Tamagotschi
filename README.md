@@ -13,12 +13,12 @@ Erwachsenen.
 
 ## Setup
 
-Voraussetzungen: JDK 17 und Android SDK (compileSdk 35).
+Voraussetzungen: JDK 17 und Android SDK (compileSdk 37).
 
 Das Gradle-Wrapper-Jar ist nicht eingecheckt; einmalig generieren mit:
 
 ```
-gradle wrapper --gradle-version 8.10.2
+gradle wrapper --gradle-version 9.9.2
 ```
 
 Danach build mit:
