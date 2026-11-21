@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,9 +21,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,19 +37,32 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gideon.tamagotchi.R
+import com.gideon.tamagotchi.data.OfflineReport
 import com.gideon.tamagotchi.domain.model.PetAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onNoPet: () -> Unit,
+    onPetDied: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(uiState.isLoading, uiState.pet) {
-        if (!uiState.isLoading && uiState.pet == null) {
-            onNoPet()
+        val currentPet = uiState.pet
+        when {
+            !uiState.isLoading && currentPet == null -> onNoPet()
+            !uiState.isLoading && currentPet != null && !currentPet.isAlive -> onPetDied()
+        }
+    }
+
+    var offlineReport by remember { mutableStateOf<OfflineReport?>(null) }
+    LaunchedEffect(Unit) {
+        viewModel.offlineReport.collect { report ->
+            if (!report.diedDuringAbsence) {
+                offlineReport = report
+            }
         }
     }
 
@@ -57,6 +75,22 @@ fun HomeScreen(
             CircularProgressIndicator()
         }
         return
+    }
+
+    if (offlineReport != null) {
+        val report = offlineReport!!
+        AlertDialog(
+            onDismissRequest = { offlineReport = null },
+            title = { Text(text = stringResource(id = R.string.offline_title)) },
+            text = {
+                Text(text = stringResource(id = R.string.offline_message, report.minutes))
+            },
+            confirmButton = {
+                TextButton(onClick = { offlineReport = null }) {
+                    Text(text = stringResource(id = android.R.string.ok))
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -87,19 +121,17 @@ fun HomeScreen(
                 )
             }
 
-            when {
-                !pet.isAlive -> Text(
-                    text = stringResource(id = R.string.pet_dead, pet.name),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.error
-                )
+            Text(
+                text = stringResource(id = pet.stage.labelRes),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
 
-                pet.isSleeping -> Text(
+            if (pet.isSleeping) {
+                Text(
                     text = stringResource(id = R.string.pet_sleeping, pet.name),
                     style = MaterialTheme.typography.titleMedium
                 )
-
-                else -> {}
             }
 
             StatBar(label = stringResource(id = R.string.stat_hunger), value = pet.hunger)

@@ -33,7 +33,7 @@ Alternativ lässt sich das Projekt direkt in Android Studio öffnen.
 
 1. Projektgerüst (Gradle, Hilt, Navigation, Theme)
 2. Pet erstellen + Home-Screen mit Statusbalken + Room-Persistenz
-3. Aktionen + Foreground-Game-Tick – aktueller Stand
-4. Background-Ticks, Offline-Sync, Lebenszyklus/Tod
+3. Aktionen + Foreground-Game-Tick
+4. WorkManager-Background-Ticks, Offline-Sync, Lebenszyklus/Evolution, GameOver – aktueller Stand
 5. Benachrichtigungen, Animationen, Sounds
 6. Tests + Release-Vorbereitung

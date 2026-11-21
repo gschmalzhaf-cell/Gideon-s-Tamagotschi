@@ -18,6 +18,7 @@ class PetRepository @Inject constructor(
 
     suspend fun createPet(name: String, type: PetType, colorHex: Long) {
         val now = System.currentTimeMillis()
+        petDao.deleteAll()
         petDao.insert(
             PetEntity(
                 name = name,
@@ -41,12 +42,21 @@ class PetRepository @Inject constructor(
     }
 
     suspend fun applyElapsedTicks() {
-        val current = petDao.getPet() ?: return
+        syncOffline()
+    }
+
+    suspend fun syncOffline(): OfflineReport? {
+        val current = petDao.getPet() ?: return null
         val now = System.currentTimeMillis()
         val elapsedMinutes = (now - current.lastTickAt) / 60_000L
-        if (elapsedMinutes <= 0) return
+        if (elapsedMinutes <= 0) return null
+        val wasAlive = current.isAlive
         val updated = TickCalculator.decay(current.toDomain(), elapsedMinutes)
             .copy(lastTickAt = now)
         petDao.update(updated.toEntity())
+        return OfflineReport(
+            minutes = elapsedMinutes,
+            diedDuringAbsence = wasAlive && !updated.isAlive
+        )
     }
 }

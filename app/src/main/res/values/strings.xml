@@ -22,4 +22,14 @@
     <string name="action_medicine">Medizin</string>
     <string name="pet_dead">%1$s ist gestorben</string>
     <string name="pet_sleeping">%1$s schläft gerade</string>
+    <string name="stage_baby">Baby</string>
+    <string name="stage_child">Kind</string>
+    <string name="stage_teen">Teenager</string>
+    <string name="stage_adult">Erwachsener</string>
+    <string name="game_over_title">Game Over</string>
+    <string name="game_over_message">%1$s ist gestorben.</string>
+    <string name="game_over_reason">Die Gesundheit ist auf 0 gefallen – das Pet wurde vernachlässigt.</string>
+    <string name="game_over_new_pet">Neues Pet anlegen</string>
+    <string name="offline_title">Während du weg warst …</string>
+    <string name="offline_message">%1$d Minuten sind vergangen.</string>
 </resources>
