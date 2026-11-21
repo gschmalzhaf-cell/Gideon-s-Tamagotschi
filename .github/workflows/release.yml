@@ -14,8 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout
+      - name: Checkout (full history + all tags, fuer Changelog)
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v6
@@ -65,13 +67,35 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: gradle :app:assembleRelease :app:bundleRelease
 
-      - name: Create GitHub Release
+      - name: Generate release notes (Template + Changelog seit letztem Tag)
+        run: |
+          python3 - "${GITHUB_REF_NAME:-manual}" <<'PY'
+          import subprocess, sys
+          version = sys.argv[1]
+          tags = subprocess.run(["git", "tag", "--sort=-v:refname"], capture_output=True, text=True).stdout.split()
+          prev = next((t for t in tags if t != version), None)
+          changelog = "- Erster Release – komplettes Feature-Set" if not prev else (
+              subprocess.run(["git", "log", "--no-merges", "--pretty=format:- %s", f"{prev}..{version}"],
+                             capture_output=True, text=True).stdout.strip() or "- keine Commits"
+          )
+          tpl = open(".github/release-notes-template.md").read()
+          notes = tpl.replace("{{VERSION}}", version).replace("{{CHANGELOG}}", changelog)
+          with open("/tmp/release-notes.md", "w") as f:
+              f.write(notes)
+          print(notes)
+          PY
+
+      - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION="${GITHUB_REF_NAME:-manual}"
-          gh release create "$VERSION" \
-            app/build/outputs/apk/release/app-release.apk \
-            app/build/outputs/bundle/release/app-release.aab \
-            --title "Gideon $VERSION" \
-            --notes "Release $VERSION – Gideon, dein Tamagot(s)chi. Füttern nicht vergessen!"
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            gh release edit "$VERSION" --notes-file /tmp/release-notes.md
+          else
+            gh release create "$VERSION" \
+              app/build/outputs/apk/release/app-release.apk \
+              app/build/outputs/bundle/release/app-release.aab \
+              --title "Gideon $VERSION" \
+              --notes-file /tmp/release-notes.md
+          fi
