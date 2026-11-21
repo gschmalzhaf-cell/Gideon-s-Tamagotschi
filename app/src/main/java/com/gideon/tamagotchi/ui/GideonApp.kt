@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gideon.tamagotchi.ui.create.CreatePetScreen
+import com.gideon.tamagotchi.ui.gameover.GameOverScreen
 import com.gideon.tamagotchi.ui.home.HomeScreen
 import com.gideon.tamagotchi.ui.navigation.Routes
 import com.gideon.tamagotchi.ui.theme.GideonTheme
@@ -23,6 +24,11 @@ fun GideonApp() {
                         navController.navigate(Routes.Create) {
                             popUpTo(Routes.Home) { inclusive = true }
                         }
+                    },
+                    onPetDied = {
+                        navController.navigate(Routes.GameOver) {
+                            popUpTo(Routes.Home) { inclusive = true }
+                        }
                     }
                 )
             }
@@ -31,6 +37,15 @@ fun GideonApp() {
                     onPetCreated = {
                         navController.navigate(Routes.Home) {
                             popUpTo(Routes.Create) { inclusive = true }
+                        }
+                    }
+                )
+            }
+            composable(Routes.GameOver) {
+                GameOverScreen(
+                    onNewPet = {
+                        navController.navigate(Routes.Create) {
+                            popUpTo(Routes.GameOver) { inclusive = true }
                         }
                     }
                 )

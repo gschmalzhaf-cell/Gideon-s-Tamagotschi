@@ -21,4 +21,7 @@ interface PetDao {
 
     @Update
     suspend fun update(pet: PetEntity)
+
+    @Query("DELETE FROM pet")
+    suspend fun deleteAll()
 }

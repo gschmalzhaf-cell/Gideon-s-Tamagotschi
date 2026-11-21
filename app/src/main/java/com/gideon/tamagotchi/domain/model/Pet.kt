@@ -1,5 +1,7 @@
 package com.gideon.tamagotchi.domain.model
 
+import com.gideon.tamagotchi.domain.EvolutionEngine
+
 data class Pet(
     val id: Long,
     val name: String,
@@ -16,4 +18,7 @@ data class Pet(
 ) {
     val health: Int
         get() = (hunger + happiness + energy + hygiene) / 4
+
+    val stage: PetStage
+        get() = EvolutionEngine.stageFor(createdAt, health, System.currentTimeMillis())
 }
