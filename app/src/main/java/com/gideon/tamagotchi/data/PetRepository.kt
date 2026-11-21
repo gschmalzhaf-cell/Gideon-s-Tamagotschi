@@ -16,6 +16,8 @@ class PetRepository @Inject constructor(
 
     fun observePet(): Flow<Pet?> = petDao.observePet().map { it?.toDomain() }
 
+    suspend fun getPet(): Pet? = petDao.getPet()?.toDomain()
+
     suspend fun createPet(name: String, type: PetType, colorHex: Long) {
         val now = System.currentTimeMillis()
         petDao.deleteAll()
