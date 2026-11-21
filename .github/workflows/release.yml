@@ -96,6 +96,6 @@ jobs:
             gh release create "$VERSION" \
               app/build/outputs/apk/release/app-release.apk \
               app/build/outputs/bundle/release/app-release.aab \
-              --title "Gideon $VERSION" \
+              --title "Gideon's Tamagot(s)chi $VERSION" \
               --notes-file /tmp/release-notes.md
           fi

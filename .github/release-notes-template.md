@@ -1,4 +1,4 @@
-# Gideon {{VERSION}} – dein Tamagot(s)chi 🐣
+# Gideon's Tamagot(s)chi {{VERSION}} 🐣
 
 ## 📜 Änderungen seit dem letzten Release
 

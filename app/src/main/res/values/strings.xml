@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Gideon</string>
+    <string name="app_name">Gideon\'s Tamagot(s)chi</string>
     <string name="create_title">Neues Pet</string>
     <string name="create_name_label">Name</string>
     <string name="create_type_label">Typ</string>

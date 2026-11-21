@@ -1,6 +1,6 @@
-# Gideon – dein Tamagot(s)chi 🐣
+# Gideon's Tamagot(s)chi 🐣
 
-**Tamagot(s)chi** – ja, mit Klammer-s. Weil Gideon manchmal eins braucht und manchmal keins.
+**Gideon's Tamagot(s)chi** – ja, mit Klammer-s. Weil Gideon manchmal eins braucht und manchmal keins.
 Gideon ist dein digitales Haustier für Android: füttere es, spiele mit ihm, leg es schlafen
 und halte es sauber. Vernachlässigst du es, wird es bockig. Sehr bockig. Und bei Gesundheit 0:
 Game Over. Bei guter Pflege dagegen entwickelt es sich vom Baby zum Erwachsenen.
