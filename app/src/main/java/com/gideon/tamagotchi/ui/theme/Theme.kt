@@ -48,7 +48,7 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = darkTertiary,
     onTertiary = darkOnTertiary,
     tertiaryContainer = darkTertiaryContainer,
-    onTertiaryContainer = darkTertiaryContainer,
+    onTertiaryContainer = darkOnTertiaryContainer,
     error = darkError,
     onError = darkOnError,
     errorContainer = darkErrorContainer,
@@ -65,7 +65,7 @@ private val DarkColorScheme = darkColorScheme(
 @Composable
 fun GideonTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
