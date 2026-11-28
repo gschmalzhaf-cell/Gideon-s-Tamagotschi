@@ -51,6 +51,8 @@ Füttere dein Pet, spiel mit ihm, leg es schlafen, bade es und pflege es gesund.
 | 📟 **Retro-Handheld-Habitat** | Ein liebevoll gestaltetes Tamagotchi-Gehäuse mit pulsierender Status-LED, animiertem Tag-/Nacht-/Krank-Himmel, wandernden Wolken, Sternen, Wiesenblumen und subtiler LCD-Scanline-Textur. |
 | 🎭 **Lebendige Emotionen** | Blinzelnde Augen, Atem-Squash-&-Stretch, dynamische Mimik für *Glücklich*, *Entspannt*, *Hungrig*, *Schmutzig*, *Müde*, *Krank*, *Schlafend* und *Geist* – plus Streichel-Reaktion beim Antippen! |
 | 👑 **Evolution & Accessoires** | **Baby** (Locke 🐣) → **Kind** (Spross 🌱) → **Teenager** (Schleife 🎀) → **Erwachsener** (schwebende Goldkrone & Aura 👑). |
+| 💞 **Bindung & Belohnung** | Pflege zahlt sich aus: Jede Aktion gibt **+5 Bindungs-XP**, regelmäßiges Reinschauen (Check-in, max. alle 30 min) **+2**. Level bringen Titel (*Neuankömmling* → *Seelenverwandte*) und Accessoires (🎀 ⭐ 🎩 👑) fürs Pet. |
+| 🌱 **Verzeihendes Balancing** | Sanftere Abnahme der Werte, kranke Pets verfallen nur halb so schnell, Offline-Abzug auf 6 h gedeckelt – Gideon stirbt nicht mehr „einfach so“. |
 | 🎮 **5 Pflege-Aktionen** | 🍔 **Füttern**, 🎾 **Spielen**, 🛁 **Waschen**, 😴 **Schlafen / ☀️ Aufwecken**, 💊 **Medizin** – jeweils mit eigenen Partikel-Effekten im Habitat und Sound-Feedback. |
 | 📊 **Übersichtliches Dashboard** | Animierte Gesundheits-Hauptleiste (mit Puls-Warnung bei < 30 %) + 2×2-Kartenraster für Hunger, Glück, Energie & Sauberkeit. |
 | 🌙 **Lebt im Hintergrund weiter** | Vordergrund-Tick (alle 60 s) & Hintergrund-Tick via **WorkManager** (alle 15 min) inklusive *„Während du weg warst …“*-Rückblick-Dialog. |
@@ -152,6 +154,7 @@ Danach bauen & testen:
 5. **Phase 5**: Benachrichtigungen, DataStore-Einstellungen, Sounds, Animationen
 6. **Phase 6**: Unit-Tests + Release-Config (Signing, ProGuard, Release-Workflow)
 7. **v1.1.0 (aktuell)**: Großes Grafik- & UI-Update (Retro-Handheld-Habitat, Custom Canvas Pet-Art für alle Spezies/Stufen/Stimmungen, Partikeleffekte, taktile Arcade-Buttons, neues App-Icon & erweiterte Roadmap)
+8. **v1.2.0 (in Arbeit)**: Balancing entschärft (langsamere Decay-Raten, kranke Pets halbieren sich, Offline-Cap 6 h) + Bindungs-XP mit Level/Titel/Accessoires + dynamisches Material-You-Theme
 
 ---
 
