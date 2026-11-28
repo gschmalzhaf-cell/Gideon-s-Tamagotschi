@@ -18,7 +18,7 @@ import com.gideon.tamagotchi.ui.theme.GideonTheme
 
 @Composable
 fun GideonApp() {
-    GideonTheme {
+    GideonTheme(dynamicColor = true) {
         val navController = rememberNavController()
         NavHost(
             navController = navController,

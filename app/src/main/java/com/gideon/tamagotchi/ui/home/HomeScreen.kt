@@ -23,6 +23,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -47,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gideon.tamagotchi.R
 import com.gideon.tamagotchi.data.OfflineReport
+import com.gideon.tamagotchi.domain.model.Pet
 import com.gideon.tamagotchi.domain.model.PetAction
 import com.gideon.tamagotchi.ui.components.CompactStatCard
 import com.gideon.tamagotchi.ui.components.HabitatEffect
@@ -227,6 +229,9 @@ fun HomeScreen(
                     value = pet.health
                 )
 
+                // Bond / Beziehung: XP durch Pflege & Check-ins, Level schalten Accessoires frei
+                BondSection(pet = pet)
+
                 // 2x2 Core Needs Grid
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Row(
@@ -340,6 +345,43 @@ fun HomeScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
             }
+        }
+    }
+}
+
+@Composable
+private fun BondSection(pet: Pet) {
+    Surface(
+        shape = RoundedCornerShape(20.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+        tonalElevation = 2.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "💞 ${stringResource(id = R.string.bond_label)} – ${stringResource(id = pet.bondTitleRes)}",
+                    style = MaterialTheme.typography.titleSmall
+                )
+                Text(
+                    text = "${pet.accessory} Lv ${pet.bondLevel}",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            LinearProgressIndicator(
+                progress = { pet.bondProgressInLevel / 100f },
+                modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant
+            )
         }
     }
 }

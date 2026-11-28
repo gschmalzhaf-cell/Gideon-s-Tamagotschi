@@ -33,9 +33,9 @@ class TickCalculatorTest {
     )
 
     @Test
-    fun `decay senkt alle Stats pro Minute`() {
+    fun `decay senkt alle Stats sanft pro Minute`() {
         val result = TickCalculator.decay(pet(), minutes = 10)
-        assertEquals(60, result.hunger)
+        assertEquals(70, result.hunger)
         assertEquals(70, result.hygiene)
         assertEquals(70, result.happiness)
         assertEquals(70, result.energy)
@@ -55,6 +55,15 @@ class TickCalculatorTest {
     }
 
     @Test
+    fun `kranke Pets verfallen nur halb so schnell`() {
+        val sick = pet(hunger = 20, happiness = 20, energy = 20, hygiene = 20)
+        val result = TickCalculator.decay(sick, minutes = 10)
+        assertEquals(15, result.hunger)
+        assertEquals(15, result.energy)
+        assertTrue(result.isAlive)
+    }
+
+    @Test
     fun `schlafen regeneriert Energie und weckt bei 100 automatisch auf`() {
         val result = TickCalculator.decay(pet(energy = 95, isSleeping = true), minutes = 1)
         assertEquals(100, result.energy)
@@ -62,9 +71,9 @@ class TickCalculatorTest {
     }
 
     @Test
-    fun `schlafen verbraucht Hunger schneller`() {
+    fun `schlafen verbraucht Hunger etwas schneller`() {
         val result = TickCalculator.decay(pet(isSleeping = true), minutes = 10)
-        assertEquals(40, result.hunger)
+        assertEquals(60, result.hunger)
     }
 
     @Test
