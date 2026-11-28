@@ -16,7 +16,9 @@ fun PetEntity.toDomain(): Pet = Pet(
     hygiene = hygiene,
     isAlive = isAlive,
     isSleeping = isSleeping,
-    lastTickAt = lastTickAt
+    lastTickAt = lastTickAt,
+    bond = bond,
+    lastCheckInAt = lastCheckInAt
 )
 
 fun Pet.toEntity(): PetEntity = PetEntity(
@@ -31,5 +33,7 @@ fun Pet.toEntity(): PetEntity = PetEntity(
     hygiene = hygiene,
     isAlive = isAlive,
     isSleeping = isSleeping,
-    lastTickAt = lastTickAt
+    lastTickAt = lastTickAt,
+    bond = bond,
+    lastCheckInAt = lastCheckInAt
 )

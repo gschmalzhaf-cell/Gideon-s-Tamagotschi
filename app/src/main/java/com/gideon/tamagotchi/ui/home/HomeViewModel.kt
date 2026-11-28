@@ -42,6 +42,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            petRepository.checkIn()
             val report = petRepository.syncOffline()
             if (report != null && report.minutes >= OFFLINE_REPORT_MIN_MINUTES) {
                 _offlineReport.emit(report)

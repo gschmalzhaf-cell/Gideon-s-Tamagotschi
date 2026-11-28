@@ -47,6 +47,12 @@
     <string name="game_over_reason">Die Gesundheit ist auf 0 gefallen – das Pet wurde vernachlässigt.</string>
     <string name="game_over_memorial">Ruhe in Pixeln, kleiner Freund.</string>
     <string name="game_over_stage_reached">Erreichte Stufe: %1$s</string>
+    <string name="bond_label">Bindung</string>
+    <string name="bond_level_1">Neuankömmling</string>
+    <string name="bond_level_2">Bekannter</string>
+    <string name="bond_level_3">Freund</string>
+    <string name="bond_level_4">Beste Freunde</string>
+    <string name="bond_level_5">Seelenverwandte</string>
     <string name="game_over_new_pet">Neues Pet ausbrüten</string>
     <string name="offline_title">Während du weg warst …</string>
     <string name="offline_message">%1$d Minuten sind vergangen. Schau schnell nach deinem Pet!</string>
